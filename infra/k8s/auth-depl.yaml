@@ -1,0 +1,43 @@
+# Deployment: monitors a set of pods, make sure they are
+# running and restarts them if they crash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: keitran0401/auth
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://auth-mongo-srv:27017/auth'
+            # Command: "kubectl create secret generic jwt-secret --from-literal=JWT_KEY=asdf"
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+---
+# Service: provides an easy-to-remember URL to
+# access & work with a running pod (containers)
+apiVersion: v1
+kind: Service # Cluster IP (by default)
+metadata:
+  name: auth-srv
+spec:
+  selector:
+    app: auth
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
