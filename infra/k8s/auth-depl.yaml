@@ -1,6 +1,4 @@
-# Deployment: monitors a set of pods, make sure they are
-# running and restarts them if they crash
-apiVersion: apps/v1
+apiVersion: apps/v1 # specifies a set of k8s objects
 kind: Deployment
 metadata:
   name: auth-depl
@@ -8,15 +6,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
-  template:
+      app: auth # selector and template are ways to make a deployment understand
+  template: # which containers it should create and manage
     metadata:
       labels:
         app: auth
     spec:
       containers:
         - name: auth
-          image: keitran0401/auth
+          image: keitran0401/auth # if google cloud: us.gcr.io/ticketing-dev-342504/auth
           env:
             - name: MONGO_URI
               value: 'mongodb://auth-mongo-srv:27017/auth'
@@ -26,14 +24,14 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_KEY
+# "kubectl rollout restart deployment [depl_name]"
 ---
-# Service: provides an easy-to-remember URL to
-# access & work with a running pod (containers)
 apiVersion: v1
-kind: Service # Cluster IP (by default)
+kind: Service
 metadata:
   name: auth-srv
 spec:
+  type: ClusterIP
   selector:
     app: auth
   ports:

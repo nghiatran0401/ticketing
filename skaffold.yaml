@@ -1,4 +1,3 @@
-# Skaffold: automates tasks & update code easily in a Kubernetes dev env
 apiVersion: skaffold/v2beta16
 kind: Config
 deploy:
@@ -6,27 +5,19 @@ deploy:
     manifests:
       - ./infra/k8s/*
 build:
-  local:
-    push: false
+  local: # can only have one of this "local" or "googleCloudBuild" at 1 time
+    push: false # don't push it to dockerhub (default)
   # googleCloudBuild:
-  #   projectId: ticketing-dev-315616
+  #   projectId: ticketing-dev-342504
   artifacts:
-    - image: keitran0401/auth
-      context: auth
+    - image: keitran0401/auth # if google cloud: us.gcr.io/ticketing-dev-342504/auth
+      context: auth # the folder
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: 'src/**/*.ts'
-            dest: .
-    - image: keitran0401/client
-      context: client
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: '**/*.js'
-            dest: .
+          - src: 'src/**/*.ts' # files that skaffold need to watch
+            dest: . # corresponding path like above
     - image: keitran0401/tickets
       context: tickets
       docker:
@@ -58,4 +49,12 @@ build:
       sync:
         manual:
           - src: 'src/**/*.ts'
+            dest: .
+    - image: keitran0401/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
             dest: .

@@ -1,35 +1,29 @@
-# "ingress-nginx": kubernetes.github.io/ingress-nginx/deploy
-# an OSS that creates a Load Balancer Service & Ingress Controller inside a Cluster
-# A Load Balancer serves the outside resquests into the Cluster
-# A Ingress Controller serves requests from the Load Balancer to specific pods
-
-# 1. run the mandatory command for deployments
-# 2. config this file
+# 1. Run the mandatory command on https://kubernetes.github.io/ingress-nginx/deploy
+# 2. Run this config file: kubectl apply -f ingress-srv.yaml
 
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-service
+  name: ingress-srv
   annotations:
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
   rules:
-    - host: ticketing.dev
+    - host: ticketing.dev # fake domain name that only works in the local machine
       http:
         paths:
-          - path: /api/payments/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: payments-srv
-                port:
-                  number: 3000
           - path: /api/users/?(.*)
             pathType: Prefix
             backend:
               service:
                 name: auth-srv
+                port:
+                  number: 3000
+          - path: /api/payments/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: payments-srv
                 port:
                   number: 3000
           - path: /api/tickets/?(.*)
