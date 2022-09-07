@@ -1,5 +1,5 @@
 import express from 'express';
-import 'express-async-errors'; // handle async await funcs automatically
+import 'express-async-errors'; // handle async await funcs automatically for routes' errors
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session'; // supports the cookie encryption
 import { errorHandler, NotFoundError } from '@keitickets/common';
@@ -10,7 +10,7 @@ import { signinRouter } from './routes/signin';
 import { signoutRouter } from './routes/signout';
 
 const app = express();
-app.set('trust proxy', true); // trust the traffics which are proxied thru ingress-nginx
+app.set('trust proxy', true); // traffics through ingress-nginx
 app.use(json());
 app.use(
   cookieSession({

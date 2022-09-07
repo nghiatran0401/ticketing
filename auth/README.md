@@ -1,17 +1,20 @@
 # Authentication Service
 
-## pagekage.json:
+## Pagekage.json:
 
 1. typescript
-2. .ts-node-dev: it restarts target node process when any of required files changes (as standard node-dev) but shares Typescript compilation process between restarts (just like node-mon)
+2. ts-node-dev: restarts target node when files change in dev env
 3. express & @types/express
+4. express-validator: validate and sanitize user input
 
 ---
 
-## commands
+## Commands
 
-"ts-node": compile & execute TS files
 "tsc --init": creates TS config files
-"ts-node-dev": restarts target node when files change in dev env
 
 ---
+
+## Notes
+
+Due to the surprising complexity around user validation, we need to move some of the the middlewares code to a common package that will eventually be push into npm

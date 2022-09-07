@@ -1,23 +1,21 @@
 import mongoose from 'mongoose';
 import { Password } from '../services/password';
 
-// These interfaces are for TS and Mongoose working with each other well
-// 1. The properties that are required to create a new User
+// The properties that are required to create a new User
 interface UserAttrs {
   email: string;
   password: string;
 }
 
-// 2. The properties that a User Model has
+// The properties that a User Model has
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
 }
 
-// 3. The properties that a User Document has
+//The properties that a User Document has
 interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
-  // createdAt: string; (more properties on a Doc)
 }
 
 const userSchema = new mongoose.Schema(
@@ -44,14 +42,17 @@ const userSchema = new mongoose.Schema(
 );
 
 // Only hash the password if it is modified
-userSchema.pre('save', async function (done) {
+userSchema.pre('save', async function (next) {
+  // Only run this function if password was moddified
+  // (not on other update functions)
   if (this.isModified('password')) {
     const hashed = await Password.toHash(this.get('password'));
     this.set('password', hashed);
-    done();
   }
+  next();
 });
 
+// Have a custom func built in the model
 userSchema.statics.build = (attrs: UserAttrs) => {
   return new User(attrs);
 };

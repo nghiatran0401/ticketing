@@ -1,8 +1,5 @@
-import { scrypt, randomBytes } from 'crypto';
-import { promisify } from 'util';
-
-// scrypt: to create a hashing password
-// promisify: to make the progress asynchronous
+import { scrypt, randomBytes } from 'crypto'; // hasing func to create a hased password
+import { promisify } from 'util'; // to make the progress asynchronous (Promise based)
 
 const scryptAsync = promisify(scrypt);
 

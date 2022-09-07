@@ -10,12 +10,7 @@ const start = async () => {
   }
 
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      // settings for MongoDB
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-    });
+    await mongoose.connect(process.env.MONGO_URI);
   } catch (err) {
     console.log(err);
   }
