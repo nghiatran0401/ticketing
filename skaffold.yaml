@@ -5,19 +5,17 @@ deploy:
     manifests:
       - ./infra/k8s/*
 build:
-  local: # can only have one of this "local" or "googleCloudBuild" at 1 time
-    push: false # don't push it to dockerhub (default)
-  # googleCloudBuild:
-  #   projectId: ticketing-dev-342504
+  local:
+    push: false # don't push it to Docker Hub
   artifacts:
-    - image: keitran0401/auth # if google cloud: us.gcr.io/ticketing-dev-342504/auth
+    - image: keitran0401/auth
       context: auth # the folder
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
           - src: 'src/**/*.ts' # files that skaffold need to watch
-            dest: . # corresponding path like above
+            dest: . # corresponding path inside the container
     - image: keitran0401/tickets
       context: tickets
       docker:

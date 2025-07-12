@@ -1,4 +1,4 @@
-apiVersion: apps/v1 # specifies a set of k8s objects
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: auth-depl
@@ -6,25 +6,23 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth # selector and template are ways to make a deployment understand
-  template: # which containers it should create and manage
+      app: auth
+  template:
     metadata:
       labels:
         app: auth
     spec:
       containers:
         - name: auth
-          image: keitran0401/auth # if google cloud: us.gcr.io/ticketing-dev-342504/auth
+          image: keitran0401/auth
           env:
             - name: MONGO_URI
               value: 'mongodb://auth-mongo-srv:27017/auth'
-            # Command: "kubectl create secret generic jwt-secret --from-literal=JWT_KEY=asdf"
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_KEY
-# "kubectl rollout restart deployment [depl_name]"
 ---
 apiVersion: v1
 kind: Service

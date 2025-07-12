@@ -5,7 +5,7 @@ import { RequestValidationError } from '../errors/request-validation-error';
 export const validateRequest = (
   req: Request,
   res: Response,
-  next: NextFunction // for error handling in express
+  next: NextFunction
 ) => {
   const errors = validationResult(req);
 
